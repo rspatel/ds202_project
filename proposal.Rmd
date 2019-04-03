@@ -1,6 +1,6 @@
 ---
 title: "Project Proposal"
-author: "Ravi Patel"
+author: "Team 8"
 date: "April 4, 2019"
 output: html_document
 ---
@@ -11,13 +11,19 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Project Coordinator:
 
-Team Memebrs (Full name):
-  Ravi Patel
+Team Memebrs (Full name):  
+  * Ravi Patel  
+  * Maxwell Farver  
+  * Evan Mills  
+  * Brian Bates  
 
-Link to Data Source:
+Link to Data Source:  
+  https://www.kaggle.com/ionaskel/nba-games-stats-from-2014-to-2018  
+  https://www.kaggle.com/drgilermo/nba-players-stats
 
 Overview of Dataset:
 
 Plan Overview:
 
-Exploratory Questions:
+Exploratory Questions:  
+  We could use full historical data to show a trend toward different playstyles by taking         max/min of stats for each year, or we could just cut it to the same years as the main team     data.
