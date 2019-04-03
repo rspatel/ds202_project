@@ -1,0 +1,23 @@
+---
+title: "Project Proposal"
+author: "Ravi Patel"
+date: "April 4, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Project Coordinator:
+
+Team Memebrs (Full name):
+  Ravi Patel
+
+Link to Data Source:
+
+Overview of Dataset:
+
+Plan Overview:
+
+Exploratory Questions:
