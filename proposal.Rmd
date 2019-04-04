@@ -9,21 +9,45 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-Project Coordinator:
+Project Coordinator: Maxwell Farver
 
-Team Memebrs (Full name):  
+Team Members (Full name):  
   * Ravi Patel  
   * Maxwell Farver  
   * Evan Mills  
   * Brian Bates  
+ \
 
 Link to Data Source:  
   https://www.kaggle.com/ionaskel/nba-games-stats-from-2014-to-2018  
   https://www.kaggle.com/drgilermo/nba-players-stats
-
+ \
+ \
+ 
 Overview of Dataset:
 
+-Dataset #1:
+
+-- The first dataset contains NBA team statistics for the 2014-2018 seasons.
+
+-Dataset #2:
+
+-- The second dataset contains NBA player statistics since 1950.
+ \
+ \
+ 
 Plan Overview:
 
+Are general plan is to delve into both datasets individually and see what we can find out. Then we are going to make connections we find between the datasets and show how player trends over the years effect the overall team stats.
+ \
+ \
+ 
 Exploratory Questions:  
-  We could use full historical data to show a trend toward different playstyles by taking         max/min of stats for each year, or we could just cut it to the same years as the main team     data.
+
+1) For the main dataset, we can see what features correlate with a win most often.
+
+2) Branching off of question 1, we can see what features correlate with the top features selected.
+  
+3) We could use full historical data of the player dataset to show a trend toward different playstyles by taking max/min of stats for each year.
+
+4) We can also cut it to the same years as the main team data.
