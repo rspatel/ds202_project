@@ -1,0 +1,36 @@
+---
+title: "NBA Game Stats"
+author: "Team 8"
+date: "April 23, 2019"
+output: html_document
+---
+Project Coordinator: Maxwell Farver
+
+Team Members (Full name):  
+  * Ravi Patel  
+  * Maxwell Farver  
+  * Evan Mills  
+  * Brian Bates
+
+```{r}
+library(ggplot2)
+library(dplyr)
+```
+
+Load in Game Stats
+```{r}
+nbaStats <- read.csv("nba.games.stats.csv")
+
+str(nbaStats)
+```
+
+Load in Player info and stats
+```{r}
+playerData <- read.csv("player_data.csv")
+players <- read.csv("Players.csv")
+seasonStats <- read.csv("Seasons_Stats.csv")
+
+str(playerData)
+str(players)
+str(seasonStats)
+```
