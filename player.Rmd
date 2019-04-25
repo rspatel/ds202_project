@@ -1,0 +1,21 @@
+---
+title: "Player_Data"
+author: "Team 8"
+date: "April 25, 2019"
+output: html_document
+---
+
+```{r}
+library(ggplot2)
+library(dplyr)
+```
+
+```{r}
+playerData <- read.csv("player_data.csv")
+players <- read.csv("Players.csv")
+seasonStats <- read.csv("Seasons_Stats.csv")
+
+str(playerData)
+str(players)
+str(seasonStats)
+```
