@@ -1,0 +1,13 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+Blah
+```{r}
+season_stats <- read.csv('Seasons_Stats.csv')
+players <- read.csv('Players.csv')
+player_data <- read.csv('player_data.csv')
+str(season_stats)
+```
