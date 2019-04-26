@@ -35,6 +35,8 @@ str(seasonStats)
 colnames(playerData)[colnames(playerData) == "name"] <- "Player"
 colnames(playerData)[colnames(playerData) == "position"] <- "Pos"
 
+players <- players[-1,]
+
 playerStats <- left_join(playerData, players, by = "Player")
 
 head(playerData)
