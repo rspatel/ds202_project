@@ -8,8 +8,9 @@ output: html_document
 ```{r}
 library(ggplot2)
 library(dplyr)
+library(tidyverse)
 ```
-
+load in data
 ```{r}
 playerData <- read.csv("player_data.csv")
 players <- read.csv("Players.csv")
@@ -18,4 +19,20 @@ seasonStats <- read.csv("Seasons_Stats.csv")
 str(playerData)
 str(players)
 str(seasonStats)
+```
+
+```{r}
+unique(seasonStats$blank2)
+unique(seasonStats$blanl)
+```
+
+Removing blank rows
+```{r}
+seasonStats <- seasonStats[-c(22,27)]
+str(seasonStats)
+```
+```{r}
+colnames(playerData)[colnames(playerData) == "name"] <- "Player"
+colnames(playerData)[colnames(playerData) == "position"] <- "Pos"
+head(playerData)
 ```
