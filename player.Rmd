@@ -79,3 +79,8 @@ colSums(nums_scaled)
 ```
 
 
+```{r}
+salaries <- read.csv('nba_salaries_1990_to_2018.csv')
+
+all_data <- left_join(play, salaries, by = "Player")
+```
