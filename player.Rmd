@@ -15,6 +15,7 @@ load in data
 playerData <- read.csv("player_data.csv")
 players <- read.csv("Players.csv")
 seasonStats <- read.csv("Seasons_Stats.csv")
+
 str(playerData)
 str(players)
 str(seasonStats)
@@ -30,10 +31,11 @@ Removing blank rows
 seasonStats <- seasonStats[-c(22,27)]
 str(seasonStats)
 ```
+
 ```{r}
 colnames(playerData)[colnames(playerData) == "name"] <- "Player"
 colnames(playerData)[colnames(playerData) == "position"] <- "Pos"
-
+players <- players[-1,]
 playerStats <- left_join(playerData, players, by = "Player")
 head(playerData)
 ```
@@ -51,17 +53,29 @@ table(play$Year)
 ```
 
 ```{r}
-# separate numeric values and scale them here
+nums_only <- play[tail(seq_along(play), 42)]
+nums_only <- cbind(nums_only, play$Year, play$MP, play$G)
+nums_only <- rename(nums_only, 'Year'='play$Year', 'MP'='play$MP','G'='play$G')
 ```
 
 ```{r}
-stats_2017_30_min <- play_scaled %>%
+stats_2017_30_min <- nums_only %>%
   mutate(min_avg = MP/G) %>%
   filter(Year == 2017, min_avg >= 30)
-stats_2017_30_min
+
+stats_2017_30_min <- na.omit(stats_2017_30_min)
 ```
 
 ```{r}
-
+# scale values
+maxs <- apply(stats_2017_30_min, 2, max)
+mins <- apply(stats_2017_30_min, 2, min)
+nums_scaled <- scale(stats_2017_30_min, center = mins, scale = maxs - mins)
 ```
+
+```{r}
+nums_scaled <- nums_scaled[ ,order(colSums(nums_scaled))]
+colSums(nums_scaled)
+```
+
 
