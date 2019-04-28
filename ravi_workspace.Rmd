@@ -1,0 +1,75 @@
+---
+title: "ravi workspace"
+author: "Ravi Patel"
+date: "April 26, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+
+nba <- read.csv("nba_games_stats.csv")
+season_stats <- read.csv('Seasons_Stats.csv')
+players <- read.csv('Players.csv')
+player_data <- read.csv('player_data.csv')
+```
+
+
+```{r}
+teams <- nba %>%
+  group_by(Team) %>%
+  summarize(
+    steals = mean(Steals)
+  )
+```
+
+```{r}
+years1 <- na.omit(all_data)
+```
+
+
+```{r}
+years2 <- years1 %>%
+  group_by(season_start) %>%
+  summarize(
+    PTS = mean(PTS),
+    AST = mean(AST.),
+    TRB = mean(TRB.),
+    STL = mean(STL.),
+    BLK = mean(BLK.),
+    FG = mean(FG.),
+    X3P = mean(X3P.),
+    FT = mean(FT.)
+  )
+```
+
+```{r}
+ggplot(years2, aes(x=season_start, y=PTS)) + geom_point()
+```
+```{r}
+ggplot(years2, aes(x=season_start, y=AST)) + geom_point()
+```
+```{r}
+ggplot(years2, aes(x=season_start, y=TRB)) + geom_point()
+```
+```{r}
+ggplot(years2, aes(x=season_start, y=STL)) + geom_point()
+```
+```{r}
+ggplot(years2, aes(x=season_start, y=BLK)) + geom_point()
+```
+```{r}
+ggplot(years2, aes(x=season_start, y=FG)) + geom_point()
+```
+```{r}
+ggplot(years2, aes(x=season_start, y=X3P)) + geom_point()
+```
+```{r}
+ggplot(years2, aes(x=season_start, y=FT)) + geom_point()
+```
+
+
