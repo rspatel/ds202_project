@@ -35,7 +35,7 @@ str(seasonStats)
 ```{r}
 colnames(playerData)[colnames(playerData) == "name"] <- "Player"
 colnames(playerData)[colnames(playerData) == "position"] <- "Pos"
-players <- players[-1,]
+players <- players[,-1]
 playerStats <- left_join(playerData, players, by = "Player")
 head(playerData)
 ```
@@ -84,3 +84,12 @@ salaries <- read.csv('nba_salaries_1990_to_2018.csv')
 
 all_data <- left_join(play, salaries, by = "Player")
 ```
+
+```{r}
+teams <- read.csv("nba.games.stats.csv")
+
+team_stats <- teams[,-1]
+
+head(team_stats)
+```
+
