@@ -1,0 +1,12 @@
+Main Idea -- Think as a player entering the NBA, what gives you the best shot?
+
+
+Players-
+  Stat trends over time (no visual)
+  Body Comp over time (no visual)
+  Colleges for each decade (no visual)
+ 
+  If you want to want to be in NBA today - top stats wanted for each position
+  --- subset players of >30min, then scale stats between [0,1] within each column, sum each column to get importance value
+  Player body comp average for each team
+  Most common colleges for each team
