@@ -31,11 +31,42 @@ Removing blank rows
 seasonStats <- seasonStats[-c(22,27)]
 str(seasonStats)
 ```
+
 ```{r}
 colnames(playerData)[colnames(playerData) == "name"] <- "Player"
 colnames(playerData)[colnames(playerData) == "position"] <- "Pos"
+
+players <- players[-1,]
 
 playerStats <- left_join(playerData, players, by = "Player")
 
 head(playerData)
 ```
+
+```{r}
+colSums(is.na(seasonStats))
+```
+
+```{r}
+play <- left_join(playerStats, seasonStats, by = "Player" )
+```
+
+```{r}
+table(play$Year)
+```
+
+```{r}
+# separate numeric values and scale them here
+```
+
+```{r}
+stats_2017_30_min <- play_scaled %>%
+  mutate(min_avg = MP/G) %>%
+  filter(Year == 2017, min_avg >= 30)
+stats_2017_30_min
+```
+
+```{r}
+
+```
+
