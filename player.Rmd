@@ -90,6 +90,13 @@ teams <- read.csv("nba.games.stats.csv")
 
 team_stats <- teams[,-1]
 
+colnames(team_stats)[colnames(team_stats) == "FieldGoals."] <- "FieldGoals_PRCT"
+colnames(team_stats)[colnames(team_stats) == "X3PointShots."] <- "X3PointShots_PRCT"
+colnames(team_stats)[colnames(team_stats) == "FreeThrows."] <- "FreeThrow_PRCT"
+colnames(team_stats)[colnames(team_stats) == "Opp.FieldGoals."] <- "Opp.FieldGoal_PRCT"
+colnames(team_stats)[colnames(team_stats) == "Opp.3PointShots."] <- "Opp.3PointShot_PRCT"
+colnames(team_stats)[colnames(team_stats) == "Opp.FreeThrows."] <- "Opp.FreeThrow_PRCT"
+
 head(team_stats)
 ```
 
