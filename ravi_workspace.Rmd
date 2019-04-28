@@ -72,4 +72,12 @@ ggplot(years2, aes(x=season_start, y=X3P)) + geom_point()
 ggplot(years2, aes(x=season_start, y=FT)) + geom_point()
 ```
 
+```{r}
+body <- years1 %>%
+  group_by(Player) %>%
+  summarise(
+    height = mean(height.y),
+    weight = mean(weight.y)
+  )
+```
 
