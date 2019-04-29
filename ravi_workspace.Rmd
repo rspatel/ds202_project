@@ -43,6 +43,7 @@ years2 <- years1 %>%
     BLK = mean(BLK.),
     FG = mean(FG.),
     X3P = mean(X3P.),
+    X3PA = mean(X3PA),
     FT = mean(FT.)
   )
 ```
@@ -73,11 +74,26 @@ ggplot(years2, aes(x=season_start, y=FT)) + geom_point()
 ```
 
 ```{r}
+ggplot(years2, aes(x=season_start, y=X3PA)) + geom_point()
+```
+
+
+```{r}
 body <- years1 %>%
   group_by(Player) %>%
   summarise(
     height = mean(height.y),
-    weight = mean(weight.y)
+    weight = mean(weight.y),
+    position = dplyr::first(Pos.x)
   )
+```
+
+```{r}
+ggplot(body, aes(x=Player, y=weight)) + 
+  geom_point() + 
+  facet_wrap(~position) +
+  theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank())
 ```
 
