@@ -119,3 +119,12 @@ Golden State -
 San Antonio - 
 
 Toronto - 
+
+```{r}
+names(all_data) <- gsub(x = names(all_data), pattern = "\\.y", replacement = "_Y")
+
+names(all_data) <- gsub(x = names(all_data), pattern = "\\.x", replacement = "_X")
+
+names(all_data) <- gsub(x = names(all_data), pattern = "\\.", replacement = "_PRCT")
+```
+
