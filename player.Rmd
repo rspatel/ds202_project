@@ -100,3 +100,22 @@ colnames(team_stats)[colnames(team_stats) == "Opp.FreeThrows."] <- "Opp.FreeThro
 head(team_stats)
 ```
 
+```{r}
+library(lubridate)
+teams <- teams %>%
+  mutate(Date = ymd(Date)) %>% 
+  mutate_at(vars(Date), funs(year, month, day))
+```
+
+```{r}
+wins <- filter(teams, WINorLOSS=='W')
+table(wins$Team)
+```
+
+The tops teams we will use for our examples are:
+
+Golden State - 
+
+San Antonio - 
+
+Toronto - 
