@@ -124,8 +124,6 @@ names(all_data) <- gsub(x = names(all_data), pattern = "collage", replacement = 
 ```
 
 ```{r}
-rookies$X3P_PRCT[is.na(rookies$X3P_PRCT)] <- 0
-
 rookies <- all_data %>%
   group_by(Player) %>%
   arrange(year_start) %>%

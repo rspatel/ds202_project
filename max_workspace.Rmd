@@ -119,7 +119,7 @@ names(all_data) <- gsub(x = names(all_data), pattern = "\\.x", replacement = "_X
 
 names(all_data) <- gsub(x = names(all_data), pattern = "\\.", replacement = "_PRCT")
 
-names(all_data) <- gsub(x = names(all_data), pattern = "collage", replacement = "college.x")
+names(all_data) <- gsub(x = names(all_data), pattern = "collage", replacement = "college_X")
 ```
 
 ```{r}
@@ -135,11 +135,12 @@ rookies$X3P_PRCT[is.na(rookies$X3P_PRCT)] <- 0
 ```
 
 ```{r}
-rookies <- separate(rookies, Pos_X, into=c('Pos','Alt_pos'))
+rookies <- separate(rookies, Pos_Y, into=c('Pos','Alt_pos'))
 
 rookie_stats <- rookies %>%
-  select(c('Pos','FG_PRCT','AST_PRCT','TS_PRCT','FT_PRCT','X3P_PRCT','X2P_PRCT','TOV_PRCT','ORB','DRB','STL','BLK', 'FG', 'FT', 'G')) %>%
+  select(c('Pos','AST','FG_PRCT','AST_PRCT','TS_PRCT','FT_PRCT','X3P_PRCT','X2P_PRCT','TOV_PRCT','ORB','DRB','STL','BLK', 'FG', 'FT', 'G')) %>%
   mutate(RBA_A=(ORB + DRB) / G,
+         AST_A=AST/G,
          STL_A=STL/G,
          BLK_A=BLK/G,
          FG_A=FG/G,
@@ -151,4 +152,29 @@ rookie_stats <- na.omit(rookie_stats)
 ```{r}
 ggplot(rookie_stats) + 
   geom_boxplot(mapping=aes(x=Pos, y=FG_PRCT))
+```
+
+```{r}
+ggplot(rookie_stats) + 
+  geom_boxplot(mapping=aes(x=Pos, y=AST_A))
+```
+
+```{r}
+ggplot(rookie_stats) + 
+  geom_boxplot(mapping=aes(x=Pos, y=STL_A))
+```
+
+```{r}
+ggplot(rookie_stats) + 
+  geom_boxplot(mapping=aes(x=Pos, y=BLK_A))
+```
+
+```{r}
+ggplot(rookie_stats) + 
+  geom_boxplot(mapping=aes(x=Pos, y=FT_PRCT))
+```
+
+```{r}
+ggplot(rookie_stats) + 
+  geom_boxplot(mapping=aes(x=Pos, y=FG_A, fill=Pos))
 ```
