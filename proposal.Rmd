@@ -21,6 +21,7 @@ Team Members (Full name):
 Link to Data Source:  
   https://www.kaggle.com/ionaskel/nba-games-stats-from-2014-to-2018  
   https://www.kaggle.com/drgilermo/nba-players-stats
+  https://data.world/datadavis/nba-salaries
  \
  \
  
@@ -33,6 +34,10 @@ Overview of Dataset:
 -Dataset #2:
 
 -- The second dataset contains NBA player statistics since 1950.
+
+-Dataset #3:
+
+-- The third dataset contains the salary data for all the players since 1990.
  \
  \
  

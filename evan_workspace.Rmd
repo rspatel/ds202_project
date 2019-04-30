@@ -1,0 +1,157 @@
+---
+title: "Evan_Workspace"
+author: "Team 8"
+date: "April 30, 2019"
+output: html_document
+---
+
+```{r}
+library(ggplot2)
+library(dplyr)
+library(tidyverse)
+```
+load in data
+```{r}
+playerData <- read.csv("player_data.csv")
+players <- read.csv("Players.csv")
+seasonStats <- read.csv("Seasons_Stats.csv")
+
+str(playerData)
+str(players)
+str(seasonStats)
+```
+
+```{r}
+unique(seasonStats$blank2)
+unique(seasonStats$blanl)
+```
+
+Removing blank rows
+```{r}
+seasonStats <- seasonStats[-c(22,27)]
+str(seasonStats)
+```
+
+```{r}
+colnames(playerData)[colnames(playerData) == "name"] <- "Player"
+colnames(playerData)[colnames(playerData) == "position"] <- "Pos"
+players <- players[,-1]
+playerStats <- left_join(playerData, players, by = "Player")
+head(playerData)
+```
+
+```{r}
+colSums(is.na(seasonStats))
+```
+
+```{r}
+play <- left_join(playerStats, seasonStats, by = "Player" )
+```
+
+```{r}
+table(play$Year)
+```
+
+```{r}
+nums_only <- play[tail(seq_along(play), 42)]
+nums_only <- cbind(nums_only, play$Year, play$MP, play$G)
+nums_only <- rename(nums_only, 'Year'='play$Year', 'MP'='play$MP','G'='play$G')
+```
+
+```{r}
+stats_2017_30_min <- nums_only %>%
+  mutate(min_avg = MP/G) %>%
+  filter(Year == 2017, min_avg >= 30)
+
+stats_2017_30_min <- na.omit(stats_2017_30_min)
+```
+
+```{r}
+# scale values
+maxs <- apply(stats_2017_30_min, 2, max)
+mins <- apply(stats_2017_30_min, 2, min)
+nums_scaled <- scale(stats_2017_30_min, center = mins, scale = maxs - mins)
+```
+
+```{r}
+nums_scaled <- nums_scaled[ ,order(colSums(nums_scaled))]
+colSums(nums_scaled)
+```
+
+
+```{r}
+salaries <- read.csv('nba_salaries_1990_to_2018.csv')
+
+all_data <- left_join(play, salaries, by = "Player")
+```
+
+```{r}
+teams <- read.csv("nba.games.stats.csv")
+
+team_stats <- teams[,-1]
+
+colnames(team_stats)[colnames(team_stats) == "FieldGoals."] <- "FieldGoals_PRCT"
+colnames(team_stats)[colnames(team_stats) == "X3PointShots."] <- "X3PointShots_PRCT"
+colnames(team_stats)[colnames(team_stats) == "FreeThrows."] <- "FreeThrow_PRCT"
+colnames(team_stats)[colnames(team_stats) == "Opp.FieldGoals."] <- "Opp.FieldGoal_PRCT"
+colnames(team_stats)[colnames(team_stats) == "Opp.3PointShots."] <- "Opp.3PointShot_PRCT"
+colnames(team_stats)[colnames(team_stats) == "Opp.FreeThrows."] <- "Opp.FreeThrow_PRCT"
+
+head(team_stats)
+```
+
+```{r}
+library(lubridate)
+teams <- teams %>%
+  mutate(Date = ymd(Date)) %>% 
+  mutate_at(vars(Date), funs(year, month, day))
+```
+
+```{r}
+wins <- filter(teams, WINorLOSS=='W')
+table(wins$Team)
+```
+
+The tops teams we will use for our examples are:
+
+Golden State -  
+
+San Antonio - 
+
+Toronto - 
+
+```{r}
+names(all_data) <- gsub(x = names(all_data), pattern = "\\.y", replacement = "_Y")
+
+names(all_data) <- gsub(x = names(all_data), pattern = "\\.x", replacement = "_X")
+
+names(all_data) <- gsub(x = names(all_data), pattern = "\\.", replacement = "_PRCT")
+
+names(all_data) <- gsub(x = names(all_data), pattern = "collage", replacement = "college_X")
+```
+
+Get the 2017 data
+```{r}
+all_data_2017 = all_data %>% filter(Year == 2017)
+
+all_data_2017 <- separate(all_data_2017, Pos_X, into=c('Pos','Alt_pos'))
+
+data_2017 <- all_data_2017 %>% select(c('Pos','FG_PRCT','AST_PRCT','TS_PRCT','FT_PRCT','X3P_PRCT','X2P_PRCT','TOV_PRCT','ORB','DRB','STL','BLK', 'FG', 'FT', 'G')) %>%
+  mutate(RBA_A=(ORB + DRB) / G,
+         STL_A=STL/G,
+         BLK_A=BLK/G,
+         FG_A=FG/G,
+         FT_A=FT/G)
+
+head(data_2017)
+```
+
+```{r}
+ggplot(data_2017, aes(x = Pos, y = FT_PRCT, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("Free Throw Percentage")
+
+ggplot(data_2017, aes(x = Pos, y = FT_A, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("Free Throw Average")
+
+ggplot(data_2017, aes(x = Pos, y = FG_PRCT, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("Field Goal Percentage")
+
+ggplot(data_2017, aes(x = Pos, y = FG_A, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("Field Goal Averae")
+```
