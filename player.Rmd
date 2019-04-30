@@ -112,13 +112,6 @@ wins <- filter(teams, WINorLOSS=='W')
 table(wins$Team)
 ```
 
-The tops teams we will use for our examples are:
-
-Golden State -  
-
-San Antonio - 
-
-Toronto - 
 
 ```{r}
 names(all_data) <- gsub(x = names(all_data), pattern = "\\.y", replacement = "_Y")

@@ -111,13 +111,6 @@ wins <- filter(teams, WINorLOSS=='W')
 table(wins$Team)
 ```
 
-The tops teams we will use for our examples are:
-
-Golden State -  
-
-San Antonio - 
-
-Toronto - 
 
 ```{r}
 names(all_data) <- gsub(x = names(all_data), pattern = "\\.y", replacement = "_Y")
@@ -130,8 +123,6 @@ names(all_data) <- gsub(x = names(all_data), pattern = "collage", replacement = 
 ```
 
 ```{r}
-rookies$X3P_PRCT[is.na(rookies$X3P_PRCT)] <- 0
-
 rookies <- all_data %>%
   group_by(Player) %>%
   arrange(year_start) %>%
@@ -139,19 +130,25 @@ rookies <- all_data %>%
   arrange(salary) %>%
   filter(row_number() %in% seq(1,10,1)) %>%
   ungroup()
+
+rookies$X3P_PRCT[is.na(rookies$X3P_PRCT)] <- 0
 ```
 
 ```{r}
+rookies <- separate(rookies, Pos_X, into=c('Pos','Alt_pos'))
+
 rookie_stats <- rookies %>%
-  select(c('Pos_X','FG_PRCT','AST_PRCT','TS_PRCT','FT_PRCT','X3P_PRCT','X2P_PRCT','TOV_PRCT','ORB','DRB','STL','BLK', 'FG', 'FT', 'G')) %>%
+  select(c('Pos','FG_PRCT','AST_PRCT','TS_PRCT','FT_PRCT','X3P_PRCT','X2P_PRCT','TOV_PRCT','ORB','DRB','STL','BLK', 'FG', 'FT', 'G')) %>%
   mutate(RBA_A=(ORB + DRB) / G,
          STL_A=STL/G,
          BLK_A=BLK/G,
          FG_A=FG/G,
          FT_A=FT/G)
+
+rookie_stats <- na.omit(rookie_stats)
 ```
 
 ```{r}
 ggplot(rookie_stats) + 
-  geom_boxplot(mapping=aes(x=Pos_X, y=FG_PRCT))
+  geom_boxplot(mapping=aes(x=Pos, y=FG_PRCT))
 ```
