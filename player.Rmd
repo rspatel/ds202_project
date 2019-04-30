@@ -114,7 +114,7 @@ table(wins$Team)
 
 The tops teams we will use for our examples are:
 
-Golden State - 
+Golden State -  
 
 San Antonio - 
 
@@ -126,5 +126,19 @@ names(all_data) <- gsub(x = names(all_data), pattern = "\\.y", replacement = "_Y
 names(all_data) <- gsub(x = names(all_data), pattern = "\\.x", replacement = "_X")
 
 names(all_data) <- gsub(x = names(all_data), pattern = "\\.", replacement = "_PRCT")
+
+names(all_data) <- gsub(x = names(all_data), pattern = "collage", replacement = "college.x")
 ```
+
+```{r}
+rookies <- all_data %>%
+  group_by(Player) %>%
+  arrange(year_start) %>%
+  filter(row_number()==1)%>%
+  arrange(salary) %>%
+  filter(row_number() %in% seq(1,10,1))
+```
+
+
+
 
