@@ -28,6 +28,8 @@ teams <- nba %>%
 ```
 
 ```{r}
+years1 <- all_data
+years1$X3P.[is.na(years1$X3P.)] <- 0
 years1 <- na.omit(all_data)
 ```
 
@@ -64,7 +66,14 @@ ggplot(years2, aes(x=season_start, y=STL)) + geom_point()
 ggplot(years2, aes(x=season_start, y=BLK)) + geom_point()
 ```
 ```{r}
-ggplot(years2, aes(x=season_start, y=FG)) + geom_point()
+ggplot(years2, aes(x=season_start, y=FG)) +
+  geom_point() +
+  labs(
+    title = "Field Goal Percentage by Year",
+    x = "Year",
+    y = "Field Goal Percentage"
+  ) +
+  scale_y_continuous(limits=c(0.415, 0.465))
 ```
 ```{r}
 ggplot(years2, aes(x=season_start, y=X3P)) + geom_point()
@@ -84,16 +93,39 @@ body <- years1 %>%
   summarise(
     height = mean(height.y),
     weight = mean(weight.y),
-    position = dplyr::first(Pos.x)
+    position = dplyr::first(Pos.y)
   )
 ```
 
 ```{r}
-ggplot(body, aes(x=Player, y=weight)) + 
-  geom_point() + 
-  facet_wrap(~position) +
-  theme(axis.title.x=element_blank(),
-        axis.text.x=element_blank(),
-        axis.ticks.x=element_blank())
+body[ , "height"] <- body[ , "height"] * 0.39370
+body[ , "weight"] <- body[ , "weight"] * 2.20462
+body <- separate(body, position, into=c("position", "alt_position"), sep="-")
+
 ```
+
+```{r}
+ggplot(body, aes(x=position, y=weight, fill=position)) + 
+  geom_boxplot() +
+  labs(
+    title = "Body Weight by Position",
+    x = "Position",
+    y = "Weight in Pounds"
+  )
+```
+
+
+```{r}
+ggplot(body, aes(x=position, y=height, fill=position)) + 
+  geom_boxplot() +
+  labs(
+    title = "Body Height by Position",
+    x = "Position",
+    y = "Height in Inches"
+  )
+```
+
+```{r}
+```
+
 
