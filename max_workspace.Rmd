@@ -130,16 +130,28 @@ names(all_data) <- gsub(x = names(all_data), pattern = "collage", replacement = 
 ```
 
 ```{r}
+rookies$X3P_PRCT[is.na(rookies$X3P_PRCT)] <- 0
+
 rookies <- all_data %>%
   group_by(Player) %>%
   arrange(year_start) %>%
   filter(row_number()==1)%>%
   arrange(salary) %>%
-  filter(row_number() %in% seq(1,10,1))
+  filter(row_number() %in% seq(1,10,1)) %>%
+  ungroup()
 ```
-
 
 ```{r}
-
+rookie_stats <- rookies %>%
+  select(c('Pos_X','FG_PRCT','AST_PRCT','TS_PRCT','FT_PRCT','X3P_PRCT','X2P_PRCT','TOV_PRCT','ORB','DRB','STL','BLK', 'FG', 'FT', 'G')) %>%
+  mutate(RBA_A=(ORB + DRB) / G,
+         STL_A=STL/G,
+         BLK_A=BLK/G,
+         FG_A=FG/G,
+         FT_A=FT/G)
 ```
 
+```{r}
+ggplot(rookie_stats) + 
+  geom_boxplot(mapping=aes(x=Pos_X, y=FG_PRCT))
+```

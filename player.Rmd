@@ -127,18 +127,20 @@ names(all_data) <- gsub(x = names(all_data), pattern = "\\.x", replacement = "_X
 
 names(all_data) <- gsub(x = names(all_data), pattern = "\\.", replacement = "_PRCT")
 
-names(all_data) <- gsub(x = names(all_data), pattern = "collage", replacement = "college.x")
+names(all_data) <- gsub(x = names(all_data), pattern = "collage", replacement = "college_X")
 ```
 
 ```{r}
+rookies$X3P_PRCT[is.na(rookies$X3P_PRCT)] <- 0
+
 rookies <- all_data %>%
   group_by(Player) %>%
   arrange(year_start) %>%
   filter(row_number()==1)%>%
   arrange(salary) %>%
-  filter(row_number() %in% seq(1,10,1))
+  filter(row_number() %in% seq(1,10,1)) %>%
+  ungroup()
 ```
-
 
 
 
