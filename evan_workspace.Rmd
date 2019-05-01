@@ -134,7 +134,7 @@ Get the 2017 data
 ```{r}
 all_data_2017 = all_data %>% filter(Year == 2017)
 
-all_data_2017 <- separate(all_data_2017, Pos_X, into=c('Pos','Alt_pos'))
+all_data_2017 <- separate(all_data_2017, Pos_Y, into=c('Pos','Alt_pos'))
 
 data_2017 <- all_data_2017 %>% select(c('Pos','FG_PRCT','AST_PRCT','TS_PRCT','FT_PRCT','X3P_PRCT','X2P_PRCT','TOV_PRCT','ORB','DRB','STL','BLK', 'FG', 'FT', 'G')) %>%
   mutate(RBA_A=(ORB + DRB) / G,
@@ -145,13 +145,32 @@ data_2017 <- all_data_2017 %>% select(c('Pos','FG_PRCT','AST_PRCT','TS_PRCT','FT
 
 head(data_2017)
 ```
-
+Free Throws
 ```{r}
 ggplot(data_2017, aes(x = Pos, y = FT_PRCT, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("Free Throw Percentage")
-
 ggplot(data_2017, aes(x = Pos, y = FT_A, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("Free Throw Average")
+```
 
+Field Goals
+```{r}
 ggplot(data_2017, aes(x = Pos, y = FG_PRCT, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("Field Goal Percentage")
-
 ggplot(data_2017, aes(x = Pos, y = FG_A, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("Field Goal Averae")
+```
+
+```{r}
+ggplot(data_2017, aes(x = Pos, y = X3P_PRCT, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("3 Point Percentage")
+ggplot(data_2017, aes(x = Pos, y = X2P_PRCT, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("2 Point Percentage")
+```
+
+```{r}
+ggplot(data_2017, aes(x = Pos, y = AST_PRCT, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("Assist Percentage")
+ggplot(data_2017, aes(x = Pos, y = TS_PRCT, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("True Shot Percentage")
+ggplot(data_2017, aes(x = Pos, y = TOV_PRCT, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("Turn Over Percentage")
+ggplot(data_2017, aes(x = Pos, y = ORB, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("Offensive Rebounds")
+ggplot(data_2017, aes(x = Pos, y = DRB, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("Deffesnive Rebound")
+ggplot(data_2017, aes(x = Pos, y = STL, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("Steals")
+ggplot(data_2017, aes(x = Pos, y = BLK, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("Blocks")
+ggplot(data_2017, aes(x = Pos, y = STL_A, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("Steal average")
+ggplot(data_2017, aes(x = Pos, y = BLK_A, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("Block Average")
+ggplot(data_2017, aes(x = Pos, y = RBA_A, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("Reboudn Average")
 ```
