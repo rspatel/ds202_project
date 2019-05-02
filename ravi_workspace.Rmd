@@ -11,6 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r}
 library(tidyverse)
+library(reshape2)
 
 nba <- read.csv("nba_games_stats.csv")
 season_stats <- read.csv('Seasons_Stats.csv')
@@ -31,6 +32,8 @@ teams <- nba %>%
 years1 <- all_data
 years1$X3P.[is.na(years1$X3P.)] <- 0
 years1 <- na.omit(all_data)
+
+years1 <- separate(years1, Pos.y, into=c("position", "alt_position"), sep="-")
 ```
 
 
@@ -73,7 +76,8 @@ ggplot(years2, aes(x=season_start, y=FG)) +
     x = "Year",
     y = "Field Goal Percentage"
   ) +
-  scale_y_continuous(limits=c(0.415, 0.465))
+  scale_y_continuous(limits=c(0.415, 0.465)) +
+  geom_line()
 ```
 ```{r}
 ggplot(years2, aes(x=season_start, y=X3P)) + geom_point()
@@ -93,7 +97,7 @@ body <- years1 %>%
   summarise(
     height = mean(height.y),
     weight = mean(weight.y),
-    position = dplyr::first(Pos.y)
+    position = dplyr::first(position)
   )
 ```
 
@@ -126,6 +130,47 @@ ggplot(body, aes(x=position, y=height, fill=position)) +
 ```
 
 ```{r}
+stretch <- years1 %>%
+  group_by(season_start, position) %>%
+  summarise(
+    three = mean(X3PA)
+  )
 ```
 
+```{r}
+ggplot(stretch, aes(x=season_start, y=three, color=position)) + 
+  geom_line() +
+  geom_point() +
+  labs(
+    title = "3-Point Attempts over the Years by Position",
+    x = "Year",
+    y = "3-Point Attempts",
+    color = "Position"
+  )
+```
+
+```{r}
+years3 <- years1 %>%
+  group_by(season_start) %>%
+  summarize(
+    FG = mean(FG.),
+    X3P = mean(X3P.),
+  ) 
+```
+
+```{r}
+melted <- melt(years3, id.var="season_start")
+```
+
+```{r}
+ggplot(melted, aes(x=season_start, y=value, color=variable)) + 
+  geom_point() +
+  geom_line() +
+  labs(
+    title = "Key Stats over the Years",
+    x = "Year",
+    y = "Percent",
+    color = "Statistic"
+  )
+```
 
