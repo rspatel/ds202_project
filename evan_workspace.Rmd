@@ -132,45 +132,65 @@ names(all_data) <- gsub(x = names(all_data), pattern = "collage", replacement = 
 
 Get the 2017 data
 ```{r}
-all_data_2017 = all_data %>% filter(Year == 2017)
+rookies <- all_data %>%
+  group_by(Player) %>%
+  arrange(year_start) %>%
+  filter(row_number()==1)%>%
+  arrange(salary) %>%
+  filter(row_number() %in% seq(1,10,1)) %>%
+  ungroup()
 
-all_data_2017 <- separate(all_data_2017, Pos_Y, into=c('Pos','Alt_pos'))
+rookies$X3P_PRCT[is.na(rookies$X3P_PRCT)] <- 0
 
-data_2017 <- all_data_2017 %>% select(c('Pos','FG_PRCT','AST_PRCT','TS_PRCT','FT_PRCT','X3P_PRCT','X2P_PRCT','TOV_PRCT','ORB','DRB','STL','BLK', 'FG', 'FT', 'G')) %>%
+rookies <- separate(rookies, Pos_Y, into=c('Pos','Alt_pos'))
+
+rookies_stats <- rookies %>%
+  select(c('Pos','FG_PRCT','AST_PRCT','TS_PRCT','FT_PRCT','X3P_PRCT','X2P_PRCT','TOV_PRCT','ORB','DRB','STL','BLK', 'FG', 'FT', 'G', 'AST')) %>%
   mutate(RBA_A=(ORB + DRB) / G,
          STL_A=STL/G,
          BLK_A=BLK/G,
          FG_A=FG/G,
-         FT_A=FT/G)
+         FT_A=FT/G,
+         AST_A=AST/G)
 
-head(data_2017)
+rookies_stats <- na.omit(rookies_stats)
 ```
+
 Free Throws
 ```{r}
-ggplot(data_2017, aes(x = Pos, y = FT_PRCT, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("Free Throw Percentage")
-ggplot(data_2017, aes(x = Pos, y = FT_A, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("Free Throw Average")
+ggplot(rookies_stats, aes(x = Pos, y = FT_PRCT, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("Free Throw Percentage")
+ggplot(rookies_stats, aes(x = Pos, y = FT_A, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("Free Throw Average")
 ```
 
 Field Goals
 ```{r}
-ggplot(data_2017, aes(x = Pos, y = FG_PRCT, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("Field Goal Percentage")
-ggplot(data_2017, aes(x = Pos, y = FG_A, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("Field Goal Averae")
+ggplot(rookies_stats, aes(x = Pos, y = FG_PRCT, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("Field Goal Percentage")
+ggplot(rookies_stats, aes(x = Pos, y = FG_A, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("Field Goal Averae")
 ```
 
 ```{r}
-ggplot(data_2017, aes(x = Pos, y = X3P_PRCT, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("3 Point Percentage")
-ggplot(data_2017, aes(x = Pos, y = X2P_PRCT, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("2 Point Percentage")
+ggplot(rookies_stats, aes(x = Pos, y = X3P_PRCT, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("3 Point Percentage")
+ggplot(rookies_stats, aes(x = Pos, y = X2P_PRCT, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("2 Point Percentage")
+```
+
+AST_PRCT, TOV_PRCT,ORB,DRB,STL,BLK,RBA_A,STL_A,BLK_A
+```{r}
+ggplot(rookies_stats, aes(x = Pos, y = AST_PRCT, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("Assist Percentage")
+ggplot(rookies_stats, aes(x = Pos, y = TOV_PRCT, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("Turn Over Percentage")
+ggplot(rookies_stats, aes(x = Pos, y = ORB, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("Offenseive Rebounds")
+ggplot(rookies_stats, aes(x = Pos, y = DRB, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("Defensive Rebounds")
+ggplot(rookies_stats, aes(x = Pos, y = STL, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("Steals")
+ggplot(rookies_stats, aes(x = Pos, y = BLK, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("Blocks")
+ggplot(rookies_stats, aes(x = Pos, y = RBA_A, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("Rebound Average")
+ggplot(rookies_stats, aes(x = Pos, y = STL_A, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("Steal Average")
+ggplot(rookies_stats, aes(x = Pos, y = BLK_A, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("Block Average")
 ```
 
 ```{r}
-ggplot(data_2017, aes(x = Pos, y = AST_PRCT, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("Assist Percentage")
-ggplot(data_2017, aes(x = Pos, y = TS_PRCT, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("True Shot Percentage")
-ggplot(data_2017, aes(x = Pos, y = TOV_PRCT, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("Turn Over Percentage")
-ggplot(data_2017, aes(x = Pos, y = ORB, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("Offensive Rebounds")
-ggplot(data_2017, aes(x = Pos, y = DRB, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("Deffesnive Rebound")
-ggplot(data_2017, aes(x = Pos, y = STL, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("Steals")
-ggplot(data_2017, aes(x = Pos, y = BLK, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("Blocks")
-ggplot(data_2017, aes(x = Pos, y = STL_A, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("Steal average")
-ggplot(data_2017, aes(x = Pos, y = BLK_A, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("Block Average")
-ggplot(data_2017, aes(x = Pos, y = RBA_A, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("Reboudn Average")
+gaurds <- rookies_stats %>% filter(Pos == "PG" | Pos == "SG")
+fowards <- filter(rookies_stats, Pos == "C" | Pos == "PF" | Pos == "SF")
+
+ggplot(fowards, aes(x = Pos, y = BLK_A, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("Block Average")
+ggplot(fowards, aes(x = Pos, y = RBA_A, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("Rebound Average")
+ggplot(gaurds, aes(x = Pos, y = AST_A, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("Assist Average")
 ```
