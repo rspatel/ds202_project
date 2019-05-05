@@ -92,6 +92,8 @@ rookies_stats <- rookies %>%
          FG_A=FG/G,
          FT_A=FT/G,
          AST_A=AST/G)
+
+rookies_safe <- rookies
 ```
 
 #### Team Members (Full name):  

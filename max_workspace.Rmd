@@ -151,7 +151,7 @@ rookie_stats <- na.omit(rookie_stats)
 
 ```{r}
 ggplot(rookie_stats) + 
-  geom_boxplot(mapping=aes(x=Pos, y=FG_PRCT))
+  geom_boxplot(mapping=aes(x=Pos, y=TS_PRCT, fill=Pos))
 ```
 
 ```{r}
@@ -161,7 +161,7 @@ ggplot(rookie_stats) +
 
 ```{r}
 ggplot(rookie_stats) + 
-  geom_boxplot(mapping=aes(x=Pos, y=STL_A))
+  geom_boxplot(mapping=aes(x=Pos, y=STL_A, fill=Pos))
 ```
 
 ```{r}
@@ -171,7 +171,7 @@ ggplot(rookie_stats) +
 
 ```{r}
 ggplot(rookie_stats) + 
-  geom_boxplot(mapping=aes(x=Pos, y=FT_PRCT))
+  geom_boxplot(mapping=aes(x=Pos, y=FT_PRCT, fill=Pos))
 ```
 
 ```{r}
