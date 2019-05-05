@@ -7,71 +7,50 @@ output: html_document
 
 ```{r warning=FALSE, include=FALSE}
 #Anything in here will not show up when knitted
-
 library(ggplot2)
 library(dplyr)
 library(tidyverse)
 library(lubridate)
-
 playerData <- read.csv("player_data.csv")
 players <- read.csv("Players.csv")
 seasonStats <- read.csv("Seasons_Stats.csv")
 seasonStats <- seasonStats[-c(22,27)]
-
 colnames(playerData)[colnames(playerData) == "name"] <- "Player"
 colnames(playerData)[colnames(playerData) == "position"] <- "Pos"
 players <- players[,-1]
 playerStats <- left_join(playerData, players, by = "Player")
-
 colSums(is.na(seasonStats))
-
 play <- left_join(playerStats, seasonStats, by = "Player" )
-
 nums_only <- play[tail(seq_along(play), 42)]
 nums_only <- cbind(nums_only, play$Year, play$MP, play$G)
 nums_only <- rename(nums_only, 'Year'='play$Year', 'MP'='play$MP','G'='play$G')
-
 stats_2017_30_min <- nums_only %>%
   mutate(min_avg = MP/G) %>%
   filter(Year == 2017, min_avg >= 30)
-
 stats_2017_30_min <- na.omit(stats_2017_30_min)
-
 # scale values
 maxs <- apply(stats_2017_30_min, 2, max)
 mins <- apply(stats_2017_30_min, 2, min)
 nums_scaled <- scale(stats_2017_30_min, center = mins, scale = maxs - mins)
-
 nums_scaled <- nums_scaled[ ,order(colSums(nums_scaled))]
 colSums(nums_scaled)
-
 salaries <- read.csv('nba_salaries_1990_to_2018.csv')
-
 all_data <- left_join(play, salaries, by = "Player")
-
 teams <- read.csv("nba.games.stats.csv")
-
 team_stats <- teams[,-1]
-
 colnames(team_stats)[colnames(team_stats) == "FieldGoals."] <- "FieldGoals_PRCT"
 colnames(team_stats)[colnames(team_stats) == "X3PointShots."] <- "X3PointShots_PRCT"
 colnames(team_stats)[colnames(team_stats) == "FreeThrows."] <- "FreeThrow_PRCT"
 colnames(team_stats)[colnames(team_stats) == "Opp.FieldGoals."] <- "Opp.FieldGoal_PRCT"
 colnames(team_stats)[colnames(team_stats) == "Opp.3PointShots."] <- "Opp.3PointShot_PRCT"
 colnames(team_stats)[colnames(team_stats) == "Opp.FreeThrows."] <- "Opp.FreeThrow_PRCT"
-
 teams <- teams %>%
   mutate(Date = ymd(Date)) %>% 
   mutate_at(vars(Date), funs(year, month, day))
-
 names(all_data) <- gsub(x = names(all_data), pattern = "\\.y", replacement = "_Y")
-
 names(all_data) <- gsub(x = names(all_data), pattern = "\\.x", replacement = "_X")
-
 names(all_data) <- gsub(x = names(all_data), pattern = "\\.", replacement = "_PRCT")
-
 names(all_data) <- gsub(x = names(all_data), pattern = "collage", replacement = "college_X")
-
 rookies <- all_data %>%
   group_by(Player) %>%
   arrange(year_start) %>%
@@ -79,11 +58,8 @@ rookies <- all_data %>%
   arrange(salary) %>%
   filter(row_number() %in% seq(1,10,1)) %>%
   ungroup()
-
 rookies$X3P_PRCT[is.na(rookies$X3P_PRCT)] <- 0
-
 rookies <- separate(rookies, Pos_Y, into=c('Pos','Alt_pos'))
-
 rookies_stats <- rookies %>%
   select(c('Pos','FG_PRCT','AST_PRCT','TS_PRCT','FT_PRCT','X3P_PRCT','X2P_PRCT','TOV_PRCT','ORB','DRB','STL','BLK', 'FG', 'FT', 'G', 'AST')) %>%
   mutate(RBA_A=(ORB + DRB) / G,
@@ -92,7 +68,6 @@ rookies_stats <- rookies %>%
          FG_A=FG/G,
          FT_A=FT/G,
          AST_A=AST/G)
-
 evan_rookie_stats <- rookies_stats
 rookies_safe <- rookies
 ```
@@ -135,6 +110,97 @@ Our third data set we used we got from Data.World. This data set covered all of 
 
 #### Body Composition (Height, Weight):
 
+```{r warning=FALSE, include=FALSE}
+years1 <- all_data
+years1$X3P_PRCT[is.na(years1$X3P_PRCT)] <- 0
+years1 <- na.omit(all_data)
+
+years1 <- separate(years1, Pos_Y, into=c("position", "alt_position"), sep="-")
+
+years2 <- years1 %>%
+  group_by(season_start) %>%
+  summarize(
+    PTS = mean(PTS),
+    AST = mean(AST_PRCT),
+    TRB = mean(TRB_PRCT),
+    STL = mean(STL_PRCT),
+    BLK = mean(BLK_PRCT),
+    FG = mean(FG_PRCT),
+    X3P = mean(X3P_PRCT),
+    X3PA = mean(X3PA),
+    FT = mean(FT_PRCT)
+  )
+```
+
+Shown in Figure 1 is the average height for an nba player in inches categorized by position. The figure shows that the PG(Point Guard) is the smallest position and the C(Center) is the tallest position. This figures shows the variation in height for each position.
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+body <- years1 %>%
+  group_by(Player) %>%
+  summarise(
+    height = mean(height_Y),
+    weight = mean(weight_Y),
+    position = dplyr::first(position)
+  )
+
+body[ , "height"] <- body[ , "height"] * 0.39370
+body[ , "weight"] <- body[ , "weight"] * 2.20462
+body <- separate(body, position, into=c("position", "alt_position"), sep="-")
+
+ggplot(body, aes(x=position, y=height, fill=position)) + 
+  geom_boxplot() +
+  labs(
+    title = "Body Height by Position",
+    x = "Position",
+    y = "Height in Inches",
+    capition = "Figure 1. Body Height by Position"
+  )
+```
+
+Figure 2 displays two key stats over the years; FG%(Feild Goal Percentage), the number of shots made by a player divided by the number of shots attempted by a player, and x3P(3-Point Percentage), similar to FG% but counts shot made over attempted per player. The FG% is consistantly declining from 1990 to 2005 then beings to steadily incline back up form 2005 to 2017. It is unclear as to why there is a consistant decrase and increase, however it is a noticable trend. For 3P% there has been a steady increase form 22% in 1990 to 30% in 2017, showing that the average player is more skilled at shooting 3-pionters over the years. 
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(reshape2)
+
+years3 <- years1 %>%
+  group_by(season_start) %>%
+  summarize(
+    FG = mean(FG_PRCT),
+    X3P = mean(X3P_PRCT),
+  ) 
+
+melted <- melt(years3, id.var="season_start")
+
+ggplot(melted, aes(x=season_start, y=value, color=variable)) + 
+  geom_point() +
+  geom_line() +
+  labs(
+    title = "Key Stats over the Years",
+    x = "Year",
+    y = "Percent",
+    color = "Statistic",
+    caption = "Figure 2. Key Stats over the Years"
+  )
+```
+
+Figure 3 compares the number of 3-pointers attemped by each position over the years. PG, SG, and SF all follow the same trend and attempt similar number of threes. However the key position to look at is the PF(Power Forward). The PF is a position which played similar to the C(Center) in the 1990. However, looking at 2017 the PF had a significant increase in the number of the threes attempted compared to the C which had a minimal increase. 
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+stretch <- years1 %>%
+  group_by(season_start, position) %>%
+  summarise(
+    three = mean(X3PA)
+  )
+
+ggplot(stretch, aes(x=season_start, y=three, color=position)) + 
+  geom_line() +
+  geom_point() +
+  labs(
+    title = "3-Point Attempts over the Years by Position",
+    x = "Year",
+    y = "3-Point Attempts",
+    color = "Position",
+    caption = "Figure 3. 3-Point Attempts over the Years by Position"
+  )
+```
+
 #### Skills (measured by stats):
 
 #### Which schools contribute the most top talent to the NBA:
@@ -152,7 +218,6 @@ rookie_stats <- rookies_safe %>%
          BLK_A=BLK/G,
          FG_A=FG/G,
          FT_A=FT/G)
-
 rookie_stats <- na.omit(rookie_stats)
 ```
 
@@ -229,6 +294,5 @@ ggplot(rookies_stats, aes(x = Pos, y = AST_A, fill = Pos)) + geom_boxplot() + xl
 ### Referenced Items:
   * Rmd Cheat Sheet:
     + https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf
-
 
 
