@@ -200,6 +200,7 @@ ggplot(stretch, aes(x=season_start, y=three, color=position)) +
     caption = "Figure 3. 3-Point Attempts over the Years by Position"
   )
 ```
+
 #### Skills (measured by stats):
 
 #### Which schools contribute the most top talent to the NBA:
