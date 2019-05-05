@@ -134,6 +134,18 @@ years2 <- years1 %>%
 
 Shown in Figure 1 is the average height for an nba player in inches categorized by position. The figure shows that the PG(Point Guard) is the smallest position and the C(Center) is the tallest position. This figures shows the variation in height for each position.
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
+body <- years1 %>%
+  group_by(Player) %>%
+  summarise(
+    height = mean(height_Y),
+    weight = mean(weight_Y),
+    position = dplyr::first(position)
+  )
+
+body[ , "height"] <- body[ , "height"] * 0.39370
+body[ , "weight"] <- body[ , "weight"] * 2.20462
+body <- separate(body, position, into=c("position", "alt_position"), sep="-")
+
 ggplot(body, aes(x=position, y=height, fill=position)) + 
   geom_boxplot() +
   labs(
