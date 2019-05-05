@@ -93,6 +93,7 @@ rookies_stats <- rookies %>%
          FT_A=FT/G,
          AST_A=AST/G)
 
+evan_rookie_stats <- rookies_stats
 rookies_safe <- rookies
 ```
 
@@ -187,7 +188,19 @@ ggplot(rookie_stats) +
 ### Evan Mills
 
 
-Most players when they enter the NBA already have a specific position in mind. Due to the various roles each position plays during a basketball game leads to some stats being more position based than others. In this section I will examine theses stats for the rookies in the NBA.
+Most players when they enter the NBA already have a specific position in mind. Due to the various roles each position plays during a basketball game leads to some stats being more position based than others. In this section I will examine theses stats for the rookies in the NBA. The first stat that I explored was the average number of blocks per game.
+```{r echo=FALSE, warning=FALSE}
+evan_rookie_stats <- na.omit(evan_rookie_stats)
+ggplot(evan_rookie_stats, aes(x = Pos, y = BLK_A, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("Block Average") + ggtitle("Average Blocks by Position") + labs(caption = "Figure 7. The average number of blocks in a game for each positon")
+```
+
+```{r echo=FALSE, warning=FALSE}
+ggplot(evan_rookie_stats, aes(x = Pos, y = RBA_A, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("Rebound Average") + ggtitle("Average Rebounds by Position") + labs(caption = "Figure 8. The average number of rebounds in a game for each position")
+```
+
+```{r echo=FALSE, warning=FALSE}
+ggplot(evan_rookie_stats, aes(x = Pos, y = AST_A, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("Assist Average") + ggtitle("Average Assists by Position") + labs(caption = "Figure 9. The average number of assists in a game for each position")
+```
 ```{r echo=FALSE, warning=FALSE}
 ggplot(rookies_stats, aes(x = Pos, y = BLK_A, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("Block Average") + ggtitle("Average Blocks by Position")
 ```
