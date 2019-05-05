@@ -7,71 +7,50 @@ output: html_document
 
 ```{r warning=FALSE, include=FALSE}
 #Anything in here will not show up when knitted
-
 library(ggplot2)
 library(dplyr)
 library(tidyverse)
 library(lubridate)
-
 playerData <- read.csv("player_data.csv")
 players <- read.csv("Players.csv")
 seasonStats <- read.csv("Seasons_Stats.csv")
 seasonStats <- seasonStats[-c(22,27)]
-
 colnames(playerData)[colnames(playerData) == "name"] <- "Player"
 colnames(playerData)[colnames(playerData) == "position"] <- "Pos"
 players <- players[,-1]
 playerStats <- left_join(playerData, players, by = "Player")
-
 colSums(is.na(seasonStats))
-
 play <- left_join(playerStats, seasonStats, by = "Player" )
-
 nums_only <- play[tail(seq_along(play), 42)]
 nums_only <- cbind(nums_only, play$Year, play$MP, play$G)
 nums_only <- rename(nums_only, 'Year'='play$Year', 'MP'='play$MP','G'='play$G')
-
 stats_2017_30_min <- nums_only %>%
   mutate(min_avg = MP/G) %>%
   filter(Year == 2017, min_avg >= 30)
-
 stats_2017_30_min <- na.omit(stats_2017_30_min)
-
 # scale values
 maxs <- apply(stats_2017_30_min, 2, max)
 mins <- apply(stats_2017_30_min, 2, min)
 nums_scaled <- scale(stats_2017_30_min, center = mins, scale = maxs - mins)
-
 nums_scaled <- nums_scaled[ ,order(colSums(nums_scaled))]
 colSums(nums_scaled)
-
 salaries <- read.csv('nba_salaries_1990_to_2018.csv')
-
 all_data <- left_join(play, salaries, by = "Player")
-
 teams <- read.csv("nba.games.stats.csv")
-
 team_stats <- teams[,-1]
-
 colnames(team_stats)[colnames(team_stats) == "FieldGoals."] <- "FieldGoals_PRCT"
 colnames(team_stats)[colnames(team_stats) == "X3PointShots."] <- "X3PointShots_PRCT"
 colnames(team_stats)[colnames(team_stats) == "FreeThrows."] <- "FreeThrow_PRCT"
 colnames(team_stats)[colnames(team_stats) == "Opp.FieldGoals."] <- "Opp.FieldGoal_PRCT"
 colnames(team_stats)[colnames(team_stats) == "Opp.3PointShots."] <- "Opp.3PointShot_PRCT"
 colnames(team_stats)[colnames(team_stats) == "Opp.FreeThrows."] <- "Opp.FreeThrow_PRCT"
-
 teams <- teams %>%
   mutate(Date = ymd(Date)) %>% 
   mutate_at(vars(Date), funs(year, month, day))
-
 names(all_data) <- gsub(x = names(all_data), pattern = "\\.y", replacement = "_Y")
-
 names(all_data) <- gsub(x = names(all_data), pattern = "\\.x", replacement = "_X")
-
 names(all_data) <- gsub(x = names(all_data), pattern = "\\.", replacement = "_PRCT")
-
 names(all_data) <- gsub(x = names(all_data), pattern = "collage", replacement = "college_X")
-
 rookies <- all_data %>%
   group_by(Player) %>%
   arrange(year_start) %>%
@@ -79,11 +58,8 @@ rookies <- all_data %>%
   arrange(salary) %>%
   filter(row_number() %in% seq(1,10,1)) %>%
   ungroup()
-
 rookies$X3P_PRCT[is.na(rookies$X3P_PRCT)] <- 0
-
 rookies <- separate(rookies, Pos_Y, into=c('Pos','Alt_pos'))
-
 rookies_stats <- rookies %>%
   select(c('Pos','FG_PRCT','AST_PRCT','TS_PRCT','FT_PRCT','X3P_PRCT','X2P_PRCT','TOV_PRCT','ORB','DRB','STL','BLK', 'FG', 'FT', 'G', 'AST')) %>%
   mutate(RBA_A=(ORB + DRB) / G,
@@ -92,21 +68,21 @@ rookies_stats <- rookies %>%
          FG_A=FG/G,
          FT_A=FT/G,
          AST_A=AST/G)
-
+evan_rookie_stats <- rookies_stats
 rookies_safe <- rookies
 ```
 
-#### Team Members (Full name):  
+## Team Members (Full name):  
   * Brian Bates  
   * Maxwell Farver (Project Coordinator)
   * Evan Mills  
   * Ravi Patel  
 
 ***
-#### Goal:
+## Goal:
 The goal of this project Was to determine the key skills that players in the NBA today have, and what skills players need to develop in order to get drafted into the NBA.
 
-##### Questions Rasied:
+### Questions Rasied:
 This goal ultimately set us out to answer the following questions:
 
   1. What skills should you work on to be competitive in the NBA?
@@ -118,21 +94,21 @@ This goal ultimately set us out to answer the following questions:
 
 
 ***
-#### Background:
+## Background:
 
 ***
-#### Data Sets Used:
+## Data Sets Used:
 For our analysis we used three different data sets. The first data set we used was one that covered team stats between the years 2014 and 2018. We got this data set from Kaggle, since it was from kaggle it was mostly clean we just had to select what we needed based on what we were focusing on.
 The second data set we used was also from Kaggle and covered stats for every player in the NBA since 1950 to 2018. Since this data set was rather large it came in multiple CSV files so the first thing we did after loading them in was a series of joins so all of the player data was in one data frame. This allowed us to easily select all of the data for the players that we were looking at.
 Our third data set we used we got from Data.World. This data set covered all of the salary information for each player for the years between 1990 and 2018.
 
 ***
-#### What skills should you work on to be competitive in the NBA?
+## What skills should you work on to be competitive in the NBA?
 
 ***
-#### What do teams look for in a possible top draft pick?
+## What do teams look for in a possible top draft pick?
 
-##### Body Composition (Height, Weight):
+#### Body Composition (Height, Weight):
 
 ```{r warning=FALSE, include=FALSE}
 years1 <- all_data
@@ -212,13 +188,71 @@ ggplot(stretch, aes(x=season_start, y=three, color=position)) +
     caption = "Figure 3. 3-Point Attempts over the Years by Position"
   )
 ```
-##### Skills (measured by stats):
+#### Skills (measured by stats):
 
-##### Which schools contribute the most top talent to the NBA:
+#### Which schools contribute the most top talent to the NBA:
 
 ***
-#### To be a top draft pick in your position, how well should you be performing on the court?
-Most players when they enter the NBA already have a specific position in mind. Due to the various roles each position plays during a basketball game leads to some stats being more position based than others. In this section I will examine theses stats for the rookies in the NBA.
+## To be a top draft pick in your position, how well should you be performing on the court?
+### Maxwell Farver
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+rookie_stats <- rookies_safe %>%
+  select(c('Pos','AST','FG_PRCT','AST_PRCT','TS_PRCT','FT_PRCT','X3P_PRCT','X2P_PRCT','TOV_PRCT','ORB','DRB','STL','BLK', 'FG', 'FT', 'G')) %>%
+  mutate(RBA_A=(ORB + DRB) / G,
+         AST_A=AST/G,
+         STL_A=STL/G,
+         BLK_A=BLK/G,
+         FG_A=FG/G,
+         FT_A=FT/G)
+rookie_stats <- na.omit(rookie_stats)
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(rookie_stats) + 
+  geom_boxplot(mapping=aes(x=Pos, y=FT_PRCT, fill=Pos)) + 
+  ggtitle('Free Throw Percentage by Position') + 
+  xlab('Position') +
+  ylab('Free Throw Percentage') +
+  labs(caption= 'Figure 4. Free Throw Percentage by Position')
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(rookie_stats) + 
+  geom_boxplot(mapping=aes(x=Pos, y=TS_PRCT, fill=Pos)) + 
+  ggtitle('True Shooting Percentage by Position') +
+  xlab('Position') +
+  ylab('True Shooting Percentage') +
+  labs(caption= 'Figure 5. True Shooting Percentage by Position')
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(rookie_stats) + 
+  geom_boxplot(mapping=aes(x=Pos, y=STL_A, fill=Pos)) + 
+  ggtitle('Average Steals by Position') + 
+  xlab('Position') +
+  ylab('Average Steals') +
+  labs(caption= 'Figure 6. Average Steals by Position')
+```
+
+
+## Things WE Thought Were Important
+### Evan Mills
+
+
+Most players when they enter the NBA already have a specific position in mind. Due to the various roles each position plays during a basketball game leads to some stats being more position based than others. In this section I will examine theses stats for the rookies in the NBA. The first stat that I explored was the average number of blocks per game.
+```{r echo=FALSE, warning=FALSE}
+evan_rookie_stats <- na.omit(evan_rookie_stats)
+ggplot(evan_rookie_stats, aes(x = Pos, y = BLK_A, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("Block Average") + ggtitle("Average Blocks by Position") + labs(caption = "Figure 7. The average number of blocks in a game for each positon")
+```
+
+```{r echo=FALSE, warning=FALSE}
+ggplot(evan_rookie_stats, aes(x = Pos, y = RBA_A, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("Rebound Average") + ggtitle("Average Rebounds by Position") + labs(caption = "Figure 8. The average number of rebounds in a game for each position")
+```
+
+```{r echo=FALSE, warning=FALSE}
+ggplot(evan_rookie_stats, aes(x = Pos, y = AST_A, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("Assist Average") + ggtitle("Average Assists by Position") + labs(caption = "Figure 9. The average number of assists in a game for each position")
+```
 ```{r echo=FALSE, warning=FALSE}
 ggplot(rookies_stats, aes(x = Pos, y = BLK_A, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("Block Average") + ggtitle("Average Blocks by Position")
 ```
@@ -232,11 +266,11 @@ ggplot(rookies_stats, aes(x = Pos, y = AST_A, fill = Pos)) + geom_boxplot() + xl
 ```
 
 ***
-#### Conclusion:
+## Conclusion:
 
 ***
-#### Sources:
-##### Data Sets:
+## Sources:
+### Data Sets:
   * Game Stats for years between 2014 and 2018:
     + https://www.kaggle.com/ionaskel/nba-games-stats-from-2014-to-2018  
   * Statistics on players since 1950:
@@ -244,9 +278,8 @@ ggplot(rookies_stats, aes(x = Pos, y = AST_A, fill = Pos)) + geom_boxplot() + xl
   * Salary data for each player since 1990:
     + https://data.world/datadavis/nba-salaries 
     
-##### Referenced Items:
+### Referenced Items:
   * Rmd Cheat Sheet:
     + https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf
-
 
 
