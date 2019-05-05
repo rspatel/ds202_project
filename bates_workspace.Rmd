@@ -33,6 +33,13 @@ Ultimately, there are some improvements to be made with the map.  First, it does
 
 Additionally, the contribution measure itself is a weighted percent of *salaries* and not the *number* of contributions.  Creating both maps to compare results would have been a good idea.
 
+#### Datasets for Map
+Database of Accredited Postsecondary Institutions and Programs
+Source: https://ope.ed.gov/dapip/#/download-data-files
+
+State Abbreviations
+Source:  https://abbreviations.yourdictionary.com/articles/state-abbrev.html
+
 
 ```{r message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
 # Dimension reduction of Rookie data
@@ -148,9 +155,3 @@ gg <- gg + labs(caption="Figure 10. Map of schools by contribution to top NBA dr
 gg
 ```
 
-## Datasets for Map
-Database of Accredited Postsecondary Institutions and Programs
-Source: https://ope.ed.gov/dapip/#/download-data-files
-
-State Abbreviations
-Source:  https://abbreviations.yourdictionary.com/articles/state-abbrev.html
