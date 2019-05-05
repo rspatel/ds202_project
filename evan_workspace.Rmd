@@ -194,3 +194,24 @@ ggplot(fowards, aes(x = Pos, y = BLK_A, fill = Pos)) + geom_boxplot() + xlab("Po
 ggplot(fowards, aes(x = Pos, y = RBA_A, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("Rebound Average")
 ggplot(gaurds, aes(x = Pos, y = AST_A, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("Assist Average")
 ```
+
+
+
+
+
+
+
+Most players when they enter the NBA already have a specific position in mind. Due to the various roles each position plays during a basketball game leads to some stats being more position based than others. In this section I will examine theses stats for the rookies in the NBA. The first stat that I explored was the average number of blocks per game. I chose this stat since a block denies the offesnsive team a shot and usually results in a turn over. Due to this blocks can play a crusial part of defense. As seen in *Figure 7* below, the number of blocks is signifcantly higher for players who play as a center(c) or power foward(pf). The reason for this is due to where these players typically are located on the court and the players body composition. The position of center and power foward are typically play closer to the basket, since they are closer to the basket they have more opertunities to get a blocked shot. The body composition of the players also play a major part since the center and power fowards are the larger players which gives them an advnatage when it comes to being able to hit the ball out of the air.
+```{r echo=FALSE, warning=FALSE}
+evan_rookie_stats <- na.omit(evan_rookie_stats)
+ggplot(evan_rookie_stats, aes(x = Pos, y = BLK_A, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("Block Average") + ggtitle("Average Blocks by Position") + labs(caption = "Figure 7. The average number of blocks in a game for each positon")
+```
+
+```{r echo=FALSE, warning=FALSE}
+ggplot(evan_rookie_stats, aes(x = Pos, y = RBA_A, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("Rebound Average") + ggtitle("Average Rebounds by Position") + labs(caption = "Figure 8. The average number of rebounds in a game for each position")
+```
+
+```{r echo=FALSE, warning=FALSE}
+ggplot(evan_rookie_stats, aes(x = Pos, y = AST_A, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("Assist Average") + ggtitle("Average Assists by Position") + labs(caption = "Figure 9. The average number of assists in a game for each position")
+```
+
