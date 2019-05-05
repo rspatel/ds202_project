@@ -1,0 +1,20 @@
+---
+title: "Untitled"
+author: "Brian Bates"
+date: "5/5/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Contributions
+
+#### Brian Bates
+
+I had two main contributions to this project.
+
+1.  Story development.  After listening to the ideas on what our project would look at (basketball) I eventually came up with the idea of telling a *story* covered under the umbrella question, "So you want to play in the NBA..."  The idea was to focus on the key statistics an aspiring player would need to have to be considered a top draft pick in the NBA.  However, I am woefully ignorant of the game of basketball and the individual statistics are overwhelming so my team was soley responsible for determining and analyzing these statistics.
+
+2.  Map.  My primary contribution to our story was the development of the map detailing which schools have contributed the most top-talent to the NBA in the last ten years.  As detailed in that section, this was done by forking the Rookie player data, filtering down the relevant factors and joining with other data sets that fill the gaps to produce plottable data.
