@@ -148,7 +148,7 @@ ggplot(body, aes(x=position, y=height, fill=position)) +
   )
 ```
 
-Figure 2 displays two key stats over the years; FG%(Feild Goal Percentage), the number of shots made by a player divided by the number of shots attempted by a player, and x3P(3-Point Percentage), similar to FG% but counts shot made over attempted per player. The FG% is consistantly declining from 1990 to 2005 then beings to steadily incline back up form 2005 to 2017. It is unclear as to why there is a consistant decrase and increase, however it is a noticable trend. For 3P% there has been a steady increase form 22% in 1990 to 30% in 2017, showing that the average player is more skilled at shooting 3-pionters over the years. 
+Figure 2 displays two key stats over the years; FG%(Field Goal Percentage), the number of shots made by a player divided by the number of shots attempted by a player, and x3P(3-Point Percentage), similar to FG% but counts shot made over attempted per player. The FG% is consistently declining from 1990 to 2005 then beings to steadily incline back up form 2005 to 2017. It is unclear as to why there is a consistent decease and increase, however it is a noticeable trend. For 3P% there has been a steady increase form 22% in 1990 to 30% in 2017, showing that the average player is more skilled at shooting 3-pointers over the years. 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 library(reshape2)
 
@@ -173,7 +173,7 @@ ggplot(melted, aes(x=season_start, y=value, color=variable)) +
   )
 ```
 
-Figure 3 compares the number of 3-pointers attemped by each position over the years. PG, SG, and SF all follow the same trend and attempt similar number of threes. However the key position to look at is the PF(Power Forward). The PF is a position which played similar to the C(Center) in the 1990. However, looking at 2017 the PF had a significant increase in the number of the threes attempted compared to the C which had a minimal increase. 
+Figure 3 compares the number of 3-pointers attempted by each position over the years. PG, SG, and SF all follow the same trend and attempt similar number of threes. However the key position to look at is the PF(Power Forward). The PF is a position which played similar to the C(Center) in the 1990. However, looking at 2017 the PF had a significant increase in the number of the threes attempted compared to the C which had a minimal increase. 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 stretch <- years1 %>%
   group_by(season_start, position) %>%
@@ -243,18 +243,18 @@ ggplot(rookie_stats) +
 ### Evan Mills
 
 
-Most players when they enter the NBA already have a specific position in mind. Due to the various roles each position plays during a basketball game leads to some stats being more position based than others. In this section I will examine theses stats for the rookies in the NBA. The first stat that I explored was the average number of blocks per game. I chose this stat since a block denies the offesnsive team a shot and usually results in a turn over. Due to this blocks can play a crusial part of defense. As seen in *Figure 7* below, the number of blocks is signifcantly higher for players who play as a center(c) or power foward(PF). The reason for this is due to where these players typically are located on the court and the players body composition. The position of center and power foward are typically play closer to the basket, since they are closer to the basket they have more opertunities to get a blocked shot. The body composition of the players also play a major part since the center and power fowards are the larger players which gives them an advnatage when it comes to being able to hit the ball out of the air.
+Most players when they enter the NBA already have a specific position in mind. Due to the various roles each position plays during a basketball game leads to some stats being more position based than others. In this section I will examine theses stats for the rookies in the NBA. The first stat that I explored was the average number of blocks per game. I chose this stat since a block denies the offensive team a shot and usually results in a turn over. Due to this blocks can play a crucial part of defense. As seen in *Figure 7* below, the number of blocks is significantly higher for players who play as a center(c) or power forward(PF). The reason for this is due to where these players typically are located on the court and the players body composition. The position of center and power forward are typically play closer to the basket, since they are closer to the basket they have more opportunities to get a blocked shot. The body composition of the players also play a major part since the center and power forwards are the larger players which gives them an advantage when it comes to being able to hit the ball out of the air.
 ```{r echo=FALSE, warning=FALSE}
 evan_rookie_stats <- na.omit(evan_rookie_stats)
 ggplot(evan_rookie_stats, aes(x = Pos, y = BLK_A, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("Block Average") + ggtitle("Average Blocks by Position") + labs(caption = "Figure 7. The average number of blocks in a game for each positon")
 ```
 
-The second stat that I looked into was the average number of rebounds per game. I chose rebounds since a rebounds decide who gets posession of the ball after a missed shot. Since you can only score when you have possession of the ball the more rebounds a team gets the more opertunities that a team has to score, and ultamately lead to more baskets being made. *Figure 8* below shows the averge number of rebounds each position gets per game, and it shows that like before the players in playing center(C) and power foward(PF) have the highest average rebounds per game. These results also are because of the location of the players on the court and the body composition.
+The second stat that I looked into was the average number of rebounds per game. I chose rebounds since a rebounds decide who gets possession of the ball after a missed shot. Since you can only score when you have possession of the ball the more rebounds a team gets the more opportunities that a team has to score, and ultimately lead to more baskets being made. *Figure 8* below shows the verge number of rebounds each position gets per game, and it shows that like before the players in playing center(C) and power forward(PF) have the highest average rebounds per game. These results also are because of the location of the players on the court and the body composition.
 ```{r echo=FALSE, warning=FALSE}
 ggplot(evan_rookie_stats, aes(x = Pos, y = RBA_A, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("Rebound Average") + ggtitle("Average Rebounds by Position") + labs(caption = "Figure 8. The average number of rebounds in a game for each position")
 ```
 
-The final stat that I looked at was the average assists per game. I chose this stat since an assist is a pass that results in the offense scoring a basket. Due to this definition assists are directly related to the over all score (ie. the more assists a team has the more points they will have). *Figure 9* shows the average assists per game by position. As seen the position that has the most assists is the point guard(PG) and the small foward(SF). When you look at what these positions do you see that these players tend to dribble the ball up the court and play further away the basket. Because of this they tend to pass the ball to the players who tend to play closer to the basket and who have a better chance at making a shot.
+The final stat that I looked at was the average assists per game. I chose this stat since an assist is a pass that results in the offense scoring a basket. Due to this definition assists are directly related to the over all score (i.e. the more assists a team has the more points they will have). *Figure 9* shows the average assists per game by position. As seen the position that has the most assists is the point guard(PG) and the small forward(SF). When you look at what these positions do you see that these players tend to dribble the ball up the court and play further away the basket. Because of this they tend to pass the ball to the players who tend to play closer to the basket and who have a better chance at making a shot.
 ```{r echo=FALSE, warning=FALSE}
 ggplot(evan_rookie_stats, aes(x = Pos, y = AST_A, fill = Pos)) + geom_boxplot() + xlab("Position") + ylab("Assist Average") + ggtitle("Average Assists by Position") + labs(caption = "Figure 9. The average number of assists in a game for each position")
 ```
@@ -273,7 +273,8 @@ ggplot(evan_rookie_stats, aes(x = Pos, y = AST_A, fill = Pos)) + geom_boxplot() 
 
 #### Evan Mills 
 
-For this project I was handled some of the data cleaning. This included importing the data form the csv and combining some...
+For this project I was handled some of the data cleaning. This included importing the data form the CSV files and combining the correct data frames, and removing duplicate and missing data. Along with this I analysed the stats that were specific for each position when getting drafted. This included getting the relevant data and creating relevant plots to go with it. 
+
 #### Ravi Patel 
 
 ***
