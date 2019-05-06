@@ -199,6 +199,16 @@ ggplot(stretch, aes(x=season_start, y=three, color=position)) +
 ## To be a top draft pick in your position, how well should you be performing on the court?
 ### Maxwell Farver
 
+#### Top 5 Most Important Skills
+
+ + Point Percentage
+ + Free Throw Percentage
+ + True Shooting Percentage  => PTS / (2 * (FGatt + 0.44 * FTatt) )
+ + Field Goal Count
+ + Steals
+
+
+
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 rookie_stats <- rookies_safe %>%
   select(c('Pos','AST','FG_PRCT','AST_PRCT','TS_PRCT','FT_PRCT','X3P_PRCT','X2P_PRCT','TOV_PRCT','ORB','DRB','STL','BLK', 'FG', 'FT', 'G')) %>%
@@ -211,6 +221,10 @@ rookie_stats <- rookies_safe %>%
 rookie_stats <- na.omit(rookie_stats)
 ```
 
+*All of the data for the next three graphics consists of a subset of our data containing the stats of rookies that were drafted within the first 10 picks of the first round.*
+
+
+*Figure 4* depicts the Free Throw percentage for the selected rookies. It can easily be seen that the positions where taller guys play tend to have a lower shooting percentage (C,PF). Our interpretation of this was that these players tend to play closer to the basket and may not get as much practice shooting from a distance, so they have more trouble at the line.
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 ggplot(rookie_stats) + 
   geom_boxplot(mapping=aes(x=Pos, y=FT_PRCT, fill=Pos)) + 
@@ -220,6 +234,8 @@ ggplot(rookie_stats) +
   labs(caption= 'Figure 4. Free Throw Percentage by Position')
 ```
 
+
+In *Figure 5* you can see that while Free Throw Percentage was different for each position, True Shooting Percentage tended to be more evenly dispersed. This makes sense if you think about it, as True Shooting Percentage was created to be a value that represented the entirety of a players shooting, or the impact they directly had on the offense. If a certain position tended to lag behind in this stat, it is very likely that said position would eventually die out and no longer be played by coaches around the league.
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 ggplot(rookie_stats) + 
   geom_boxplot(mapping=aes(x=Pos, y=TS_PRCT, fill=Pos)) + 
@@ -229,6 +245,8 @@ ggplot(rookie_stats) +
   labs(caption= 'Figure 5. True Shooting Percentage by Position')
 ```
 
+
+The Average Number of Steals per position is shown in *Figure 6*. Steals can cause a swing in momentum in a game due to the high likelihood of a breakaway with an easy score for the team who stole the ball. This can cause a potential six point swing and quickly close the gap between two teams. Smaller players tended to have more steals on average than larger players, due to the fact that the smaller players play defense around teh paremeter where the ball is being dribbled more, leading to more opportunities for steals.
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 ggplot(rookie_stats) + 
   geom_boxplot(mapping=aes(x=Pos, y=STL_A, fill=Pos)) + 
@@ -260,7 +278,186 @@ ggplot(evan_rookie_stats, aes(x = Pos, y = AST_A, fill = Pos)) + geom_boxplot() 
 ```
 
 ***
+```{r message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+#(list=ls())
+library(tidyverse)
+library(RColorBrewer)
+library(ggthemes)
+```
+
+## University Education
+### Brian Bates
+
+#### Background
+
+If you want to play in the NBA you have to go to College for at least one year.  One question we proposed was, "<i>Where</i> should you go to College?" or alternatively, "Which Colleges have contributed the most top draft picks in the NBA?"  Remember, the underlying assumption we used is that the higher the salary of a player in their first year, the higher they likely went in the draft.  Lastly, it's important to note the data has been filtered down to the last ten years.  This was done so that up-and-coming schools, such as Iowa State, which have not been traditional power houses in NCAA basketball, will not be drowned out by the schools that have been elite for some time.
+
+#### Producing the Map
+
+This visualization was particularly challenging to construct due to the number of data sets needed to produce the map.  In addition to those needed to produce Rookie data, this map required **three** additional datasets to link the player's School with plottable data.  Data on Rookie players only included the name of the institution to which they attended.  Downloading and parsing data from the Department of Education, which shows over 31,000 accredited upper-level institutions, can be merged with Rookie data to find which states the schools are in.  Finally, the dataset can be combined with a dataset containing state abbreviations and then the regular map data used to produce choropleth maps.
+
+#### Interpretation
+
+The map in Figure 10 is clear as to which States contribute the most to top draft picks, however, because the schools are hidden in the State it doesn't answer the original question of which *school*.  This issue is further explored below in challenges.  
+
+Far more questions were raised by the map than were answered.  For instance, why are so many power schools in the Southern half of the United States?  Is it that nearly year-round temperate weather facilitates more playing and thus better skills?  What is the relation of school size or history to contributions?  Do we see an up-and-coming schools, such as Iowa State, showing up in the last ten years?  Clearly the map is a stepping-stone for further exploration.  
+
+#### Challenges
+
+Ultimately, there are some improvements to be made with the map.  First, it does not directly answer our question of which *schools* contribute the most, but rather which states house the schools that produce the most.  With so many schools on the map, it became too cluttered and the choice was made to switch to showing the States which hold those schools.  This is not an unreasonable switch to make, since elite NCAA schools will likely have ancillary support in the area - from prep-schools, training facilities, medical professionals and more.  It is easy to see that the more elite a school is, the more surrounding schools may contribute as well and the same "hubs" still form; these hubs are now represented in State contributions.
+
+Additionally, the contribution measure itself is a weighted percent of *salaries* and not the *number* of contributions.  Creating both maps to compare results would have been a good idea.
+
+#### Datasets for Map
+Database of Accredited Postsecondary Institutions and Programs
+Source: https://ope.ed.gov/dapip/#/download-data-files
+
+State Abbreviations
+Source:  https://abbreviations.yourdictionary.com/articles/state-abbrev.html
+
+
+```{r message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+# Dimension reduction of Rookie data
+rookie.data <- rookies_safe %>% 
+  filter(year_start >= 2009) %>%
+  select(Player, year_start, college, salary) %>%
+  rename(School = college)
+str(rookie.data)
+```
+
+
+```{r message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+# Collecting a list of school from US Department of Education.
+institutions <- read.csv("institutions.csv", stringsAsFactors = FALSE)
+
+# Dimension reduction
+schools <- institutions %>% select(LocationName, Address)
+
+# Rename columns
+colnames(schools) <- c("School", "Location")
+
+# Split the location to get the city and state
+schools <- schools %>% mutate(StateZip = str_extract(Location, "[A-Z]{2}\\s\\d{5}")) %>%
+            separate(StateZip, c("State", "Zip")) %>%
+            mutate(CityState = str_extract(Location, "[a-z,A-Z]+,\\s[A-Z]{2}")) %>%
+            separate(CityState, c("City", "Misc"), sep=",") %>%
+            select(-Misc)
+
+str(schools)
+
+```
+
+
+```{r message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+# Join School & Rookie
+rookies.schools <- inner_join(rookie.data, schools, by="School")
+str(rookies.schools)
+```
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+# Load in a CSV file containing states names and their abbreviations
+state_abbr <- read.csv("state_abbr.csv", stringsAsFactors = FALSE)
+colnames(state_abbr)[1] <- 'States'
+
+state_abbr <- state_abbr %>% separate(States, c("Region", "State"), sep=" - ") %>%
+                             mutate(Region = tolower(Region)) %>%
+                             rename(region = Region) 
+
+#str(state_abbr)
+
+# Load in other state data
+states <- map_data('state') %>%
+  select(-subregion)
+#str(states)
+
+# Merge the two groups by region
+state.data <- states %>% group_by(region) %>%
+                  inner_join(state_abbr, by="region") %>%
+                  ungroup()
+#str(state.data)
+
+# Merge rookie.schools & states
+map.data <- inner_join(rookies.schools, state.data, by="State")
+
+map.data.1997 <- map.data %>% filter(year_start == 1997)
+```
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+# Remove NAs
+map.data <- map.data %>% mutate_all(~replace(., is.na(.), 0)) 
+
+final.data <- state_abbr
+final.data$Salary = rep(0, 50)
+
+# Aggregate the total salary for each state
+for (i in seq(final.data$State)) {
+  active.state <- final.data$State[i]
+  
+  state.map.data <- map.data %>% filter(State == active.state)    
+  
+  final.data$Salary[i] = sum(state.map.data$salary)
+}
+
+# Determine the total salary
+Total.Salary <- sum(final.data$Salary)
+
+# Convert total salary to percentage
+final.data <- final.data %>% mutate(Percent = Salary / Total.Salary)
+# str(final.data)
+
+# final.data$cut <- as.character(cut(final.data$Percent,
+#                                   breaks=pretty(x=final.data$Percent, n=10),
+#                                   labels=pretty(x=final.data$Percent, n=10)[-1],
+#                                   ordered_result=TRUE))
+
+gg <- ggplot()
+gg <- gg + geom_map(data=states, map=states, aes(x=long, y=lat, map_id=region), color="white", size=0.15, fill=NA)
+gg <- gg + geom_map(data=final.data, map=states, aes(fill=Percent, map_id=region), color="white", size=0.15)
+# gg <- gg + scale_fill_brewer(name="% Players",
+#                              labels = seq(10, 0, -1),
+#                              palette="BuGn",
+#                              na.value = "#eaf7fb",
+#                              direction=-1) #, discrete=TRUE, begin=0.1, end=0.9
+gg <- gg + scale_fill_gradient(name="Players",
+                    # labels = seq(1, 10),
+                    low="#4ba7f5", 
+                    high="#13273a")
+gg <- gg + coord_map("polyconic")
+gg <- gg + theme_map()
+gg <- gg + theme(legend.position="right")
+gg <- gg + labs(caption="Figure 10. Map of schools by contribution to top NBA draft picks.")
+gg
+```
+
+
+***
 ## Conclusion:
+We had one main goal in mind when it came to this project. 
+
+### So You Want To Play in the NBA
+
+The things that we determined to be the biggest factors in succeeding in your endeavor are:
+
+ + Be a good shooter
+ + Be aggressive (take a lot of shots)
+ + Force Turnovers
+   - Steals
+   - Blocks
+ + Be taller that 6-foot, especially for post players
+ + Play to your position's strengths
+   - Point Gaurd: Focus on passing
+   - Center: Focus on rebounds and blocks
+ + Look at schools located in:
+   - Texas
+   - California
+   - Washington
+   - Kentucky
+   - North Carolina
+   - Florida
+   
+Do these things and with a little bit of luck you are well on your way to playing in the NBA.
 
 
 ***
@@ -269,6 +466,7 @@ ggplot(evan_rookie_stats, aes(x = Pos, y = AST_A, fill = Pos)) + geom_boxplot() 
 
 
 #### Maxwell Farver (Project Coordinator)
+My contribution to the project consisted of a few things (as well as help with the final report, but everyone helped with it). I first helped clean the data initially for everyone to work off of. I then found out the most common skills among top players in the NBA. Lastly, I plotted a few of the most important skills to find out what conclusions we could draw from them.
 
 
 #### Evan Mills 
