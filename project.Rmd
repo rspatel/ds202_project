@@ -463,7 +463,11 @@ Do these things and with a little bit of luck you are well on your way to playin
 ***
 ## Contributions:
 #### Brian Bates 
+I had two main contributions to this project.
 
+1.  Story development.  After listening to the ideas on what our project would look at (basketball) I eventually came up with the idea of telling a *story* covered under the umbrella question, "So you want to play in the NBA..."  The idea was to focus on the key statistics an aspiring player would need to have to be considered a top draft pick in the NBA.  However, I am woefully ignorant of the game of basketball and the individual statistics are overwhelming so my team was soley responsible for determining and analyzing these statistics.
+
+2.  Map.  My primary contribution to our story was the development of the map detailing which schools have contributed the most top-talent to the NBA in the last ten years.  As detailed in that section, this was done by forking the Rookie player data, filtering down the relevant factors and joining with other data sets that fill the gaps to produce plottable data.
 
 #### Maxwell Farver (Project Coordinator)
 My contribution to the project consisted of a few things (as well as help with the final report, but everyone helped with it). I first helped clean the data initially for everyone to work off of. I then found out the most common skills among top players in the NBA. Lastly, I plotted a few of the most important skills to find out what conclusions we could draw from them.
