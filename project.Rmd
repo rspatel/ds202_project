@@ -262,6 +262,20 @@ ggplot(evan_rookie_stats, aes(x = Pos, y = AST_A, fill = Pos)) + geom_boxplot() 
 ***
 ## Conclusion:
 
+
+***
+## Contributions:
+#### Brian Bates 
+
+
+#### Maxwell Farver (Project Coordinator)
+
+
+#### Evan Mills 
+
+For this project I was handled some of the data cleaning. This included importing the data form the csv and combining some...
+#### Ravi Patel 
+
 ***
 ## Sources:
 ### Data Sets:
