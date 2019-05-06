@@ -479,6 +479,8 @@ For this project I was handled some of the data cleaning. This included importin
 
 #### Ravi Patel 
 
+My contribuation to this project was to create the plots for the average player height by position over the years, the leagure average FG% and 3P% over the years, and the average number of 3PA per position over the years. I also handled the presentation slides related to these three plots and the related section of the project report. i also have a Rmd file call "ravi_workspace", which contains data cleaning steps and other plots that were apart of the brainstorming process.
+
 ***
 ## Sources:
 ### Data Sets:
